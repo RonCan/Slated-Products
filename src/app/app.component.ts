@@ -7,9 +7,9 @@ import {ProductService} from './product.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  menu: any;
   constructor(private productService: ProductService) {
   }
-  menu = {};
   getMenu(): void {
     this.menu = this.productService.getMenu();
   }
