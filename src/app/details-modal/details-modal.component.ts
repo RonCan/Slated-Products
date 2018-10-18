@@ -79,6 +79,7 @@ export class DialogOverviewExampleDialog {
   }
   selectedMilk: string;
   selectedSyrup: string;
+  selectedOptions: any;
   milk: AddOn[] = [
     { name: 'Full Milk', price: 0 },
     { name: 'Skim Milk', price: 0 },
