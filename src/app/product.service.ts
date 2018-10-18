@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import {menu} from './menu';
+import { menu } from './menu';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
-
-  constructor() { }
-  getMenu = () =>  {
+  constructor() {}
+  getMenu = () => {
     return menu;
-  }
+  };
 }

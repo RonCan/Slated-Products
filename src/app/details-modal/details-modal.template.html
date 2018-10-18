@@ -1,26 +1,32 @@
 <mat-dialog-content>
+  <button (click)="closeDialog()" mat-fab style="    position: absolute;
+    z-index: 1000;
+    margin-left: 10px;
+    margin-top: 10px;">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
   <mat-card>
     <img mat-card-image src="../../assets/img/coffee.jpg">
     <div style="text-align: center">
       <mat-card-title>
-        Coffee Late Decaf
+        {{data.product.name}}
       </mat-card-title>
       <mat-card-subtitle>
-        Freshly ground beans and steamed milk
+        {{data.product.description}}
       </mat-card-subtitle>
     </div>
     <hr/>
     <mat-card-content>
       <mat-list>
         <mat-list-item>
-          Pepper
+          ${{this.total}}
           <span style="flex: 1 1 auto;"></span>
-          <button mat-icon-button>
-            <mat-icon style="color: #ff4081">remove_circle</mat-icon>
+          <button (click)="removeProduct()" color="accent" [disabled]="this.quantity < 2" mat-icon-button>
+            <mat-icon>remove_circle</mat-icon>
           </button>
-          1
-          <button mat-icon-button>
-            <mat-icon style="color: #ff4081">add_circle</mat-icon>
+          {{this.quantity}}
+          <button (click)="addProduct()" color="accent" mat-icon-button>
+            <mat-icon>add_circle</mat-icon>
           </button>
         </mat-list-item>
         <mat-divider></mat-divider>
@@ -32,17 +38,15 @@
         Milk Required
       </div>
       <mat-list>
-        <mat-radio-group class="example-radio-group" [(ngModel)]="favoriteSeason">
-          <mat-list-item *ngFor="let season of seasons">
-            <mat-radio-button style="width: 100%" labelPosition="before" class="example-radio-button" [value]="season">
-              {{season}}
+        <mat-radio-group class="example-radio-group" [(ngModel)]="selectedMilk">
+          <mat-list-item *ngFor="let type of milk">
+            <mat-radio-button (change)="milkChange($event, type.price)" style="width: 100%" labelPosition="before" class="example-radio-button" [value]="type.name">
+              {{type.name}} <span *ngIf="type.price" style="margin-left: 5px; color: grey">($ {{type.price}})</span>
             </mat-radio-button>
           </mat-list-item>
         </mat-radio-group>
         <mat-divider></mat-divider>
       </mat-list>
-      <div class="example-selected-value">Your favorite season is: {{favoriteSeason}}</div>
-
       <div style="color: rgba(0,0,0,.54);
     background: rgba(0,0,0,.03); margin-left: -24px; margin-right:-24px; height:40px;line-height: 3;
     font-weight: bold;
@@ -50,30 +54,29 @@
         Syrup Option
       </div>
       <mat-list>
-        <mat-radio-group class="example-radio-group" [(ngModel)]="favoriteSeason">
-          <mat-list-item *ngFor="let season of seasons">
-            <mat-radio-button style="width: 100%" labelPosition="before" class="example-radio-button" [value]="season">
-              {{season}}
+        <mat-radio-group class="example-radio-group" [(ngModel)]="selectedSyrup">
+          <mat-list-item *ngFor="let season of syrup">
+            <mat-radio-button (change)="syrupChange($event, season.price)" style="width: 100%" labelPosition="before" class="example-radio-button" [value]="season.name">
+              {{season.name}} <span *ngIf="season.price" style="margin-left: 5px; color: grey">($ {{season.price}})</span>
             </mat-radio-button>
           </mat-list-item>
         </mat-radio-group>
         <mat-divider></mat-divider>
       </mat-list>
-      <div class="example-selected-value">Your favorite season is: {{favoriteSeason}}</div>
       <div style="color: rgba(0,0,0,.54);
     background: rgba(0,0,0,.03); margin-left: -24px; margin-right:-24px; height:40px;line-height: 3;
     font-weight: bold;
     padding-left: 10px;">
         Chocolade
       </div>
-      <mat-selection-list #shoes>
-        <mat-list-option *ngFor="let shoe of typesOfShoes">
-          {{shoe}}
+      <mat-selection-list (ngModelChange)="chocoladeChange($event)" [(ngModel)]="selectedOptions" class="chocolate" #chocolatess>
+        <mat-list-option [value]="chocolate.name" *ngFor="let chocolate of chocolates">
+          {{chocolate.name}} <span *ngIf="chocolate.price" style="margin-left: 5px; color: grey">($ {{chocolate.price}})</span>
         </mat-list-option>
       </mat-selection-list>
 
       <p>
-        Options selected: {{shoes.selectedOptions.selected.length}}
+        Options selected: {{chocolatess.selectedOptions.selected.length}}
       </p>
       <div style="margin-top: 30px">
         <button style="width: 100%" mat-raised-button>
@@ -81,22 +84,9 @@
             add_shopping_cart
           </i>
           Basic
-          200$
+          {{this.total}}
         </button>
       </div>
     </mat-card-content>
   </mat-card>
 </mat-dialog-content>
-<!--<h1 mat-dialog-title>Hi {{data.name}}</h1>-->
-<!--<div mat-dialog-content>-->
-  <!--<p>What's your favorite animal?</p>-->
-  <!--<mat-form-field>-->
-    <!--<input matInput [(ngModel)]="data.animal">-->
-  <!--</mat-form-field>-->
-  <!--<h1>{{data.id}}</h1>-->
-  <!--<button mat-raised-button matDialogClose>Cancel</button>-->
-<!--</div>-->
-<!--<div mat-dialog-actions>-->
-  <!--<button mat-button (click)="onNoClick()">No Thanks</button>-->
-  <!--<button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>-->
-<!--</div>-->

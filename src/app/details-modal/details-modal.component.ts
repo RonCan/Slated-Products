@@ -1,59 +1,155 @@
-import { Component, OnInit, Inject} from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {ActivatedRoute} from '@angular/router';
+import {
+  Component,
+  OnInit,
+  Inject,
+  Input,
+  EventEmitter,
+  Output,
+} from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
+import { ProductService } from '../product.service';
+import {AddOn, Product} from './interfaces';
+
 export interface DialogData {
-  animal: string;
-  name: string;
-  id: number;
+  product: Product;
 }
 
 @Component({
   selector: 'app-details-modal',
   templateUrl: './details-modal.component.html',
-  styleUrls: ['./details-modal.component.css']
+  styleUrls: ['./details-modal.component.css'],
 })
 export class DetailsModalComponent implements OnInit {
   id: number;
-  animal: string;
-  constructor(public dialog: MatDialog, private route: ActivatedRoute, private location: Location) {
+  @Input()
+  product: Product;
+  @Output()
+  dialogClosed = new EventEmitter<boolean>();
+  constructor(
+    public dialog: MatDialog,
+    private route: ActivatedRoute,
+    private location: Location,
+    private productService: ProductService
+  ) {
     this.id = +this.route.snapshot.paramMap.get('id');
-    this.openDialog();
   }
 
   ngOnInit() {
+    if (this.product) {
+      setTimeout(() => this.openDialog());
+    } else {
+      this.product = this.productforID();
+      setTimeout(() => this.openDialog());
+    }
+  }
+
+  productforID(): any {
+    return this.productService.getMenu().products.filter(product => {
+      return product.id === this.id;
+    })[0];
   }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      data: {name: 'Haroon', animal: 'Lion', id: this.id}
+      autoFocus: false,
+      data: { product: this.product },
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.location.back();
-      this.animal = result;
+      window.history.replaceState({}, '', `/`);
+      this.dialogClosed.emit(true);
     });
   }
-
 }
 
 @Component({
   selector: 'details-modal.template',
   templateUrl: 'details-modal.template.html',
-  styleUrls: ['./details-modal.component.css']
+  styleUrls: ['./details-modal.component.css'],
 })
 export class DialogOverviewExampleDialog {
-
   constructor(
     public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
-  favoriteSeason: string;
-  seasons: string[] = ['Winter', 'Spring', 'Summer', 'Autumn'];
-  typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
-  onNoClick(): void {
-    this.dialogRef.close();
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {
+    this.data = data;
+  }
+  selectedMilk: string;
+  selectedSyrup: string;
+  milk: AddOn[] = [
+    { name: 'Full Milk', price: 0 },
+    { name: 'Skim Milk', price: 0 },
+    { name: 'Soy Milk', price: 20 },
+  ];
+  syrup: AddOn[] = [
+    { name: 'Nutty', price: 10 },
+    { name: 'Cherry', price: 10 },
+    { name: 'Chocolade', price: 10 },
+  ];
+  chocolates: AddOn[] = [
+    { name: 'Toblerone', price: 70 },
+    { name: 'Patchi', price: 60 },
+    { name: 'Spartak', price: 40 },
+  ];
+  total: number = this.data.product.price;
+  quantity = 1;
+  currentMilkPrice = 0;
+  currentSyrupPrice = 0;
+  chocolades: string[] = [];
+  addProduct(): void {
+    this.quantity = this.quantity + 1;
+    this.total = this.total + this.data.product.price;
+  }
+  removeProduct(): void {
+    if (this.quantity > 1) {
+      this.quantity = this.quantity - 1;
+      this.total = this.total - this.data.product.price;
+    }
   }
 
+  milkChange(event, price): void {
+    if (this.currentMilkPrice || price) {
+      if (this.currentMilkPrice) {
+        this.total = this.total - this.currentMilkPrice;
+      }
+      if (price) {
+        this.total = this.total + price;
+      }
+    }
+    this.currentMilkPrice = price;
+  }
+
+  syrupChange(event, price): void {
+    if (this.currentSyrupPrice || price) {
+      if (this.currentSyrupPrice) {
+        this.total = this.total - this.currentSyrupPrice;
+      }
+      if (price) {
+        this.total = this.total + price;
+      }
+    }
+    this.currentSyrupPrice = price;
+  }
+
+  chocoladeChange(values): void {
+    const removed = this.chocolades.filter(e => !values.find(a => e === a))[0];
+    const added = values.filter(e => !this.chocolades.find(a => e === a))[0];
+    if (added) {
+      const obj = this.chocolates.filter(choc => choc.name === added)[0];
+      this.total = this.total + obj.price;
+    }
+    if (removed) {
+      const obj = this.chocolates.filter(choc => choc.name === removed)[0];
+      this.total = this.total - obj.price;
+    }
+    this.chocolades = values;
+    console.log(values);
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close('Pizza!');
+  }
 }

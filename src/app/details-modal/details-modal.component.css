@@ -1,4 +1,8 @@
 /deep/.mat-radio-container {
   position: absolute !important;
-  right: 12px;
+  right: 15px;
+}
+
+/deep/.chocolate .mat-list-text {
+  display: inline-block !important;
 }
