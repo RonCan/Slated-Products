@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { ProductService } from '../product.service';
-import {AddOn, Product} from './interfaces';
+import {AddOn, Product, Result} from './interfaces';
 
 export interface DialogData {
   product: Product;
@@ -27,7 +27,7 @@ export class DetailsModalComponent implements OnInit {
   @Input()
   product: Product;
   @Output()
-  dialogClosed = new EventEmitter<boolean>();
+  dialogClosed = new EventEmitter<Result>();
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
@@ -54,13 +54,13 @@ export class DetailsModalComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      autoFocus: false,
+      disableClose: true,
       data: { product: this.product },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       window.history.replaceState({}, '', `/`);
-      this.dialogClosed.emit(true);
+      this.dialogClosed.emit(result);
     });
   }
 }
@@ -146,10 +146,9 @@ export class DialogOverviewExampleDialog {
       this.total = this.total - obj.price;
     }
     this.chocolades = values;
-    console.log(values);
   }
 
   closeDialog(): void {
-    this.dialogRef.close('Pizza!');
+    this.dialogRef.close({title: this.data.product.name, quantity: this.quantity, milk: this.selectedMilk, syrup: this.selectedSyrup, total: this.total});
   }
 }

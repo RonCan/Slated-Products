@@ -7,7 +7,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatRadioModule,
+  MatRadioModule, MatSnackBarModule,
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -37,6 +37,7 @@ import { FormsModule } from '@angular/forms';
     MatCardModule,
     MatIconModule,
     MatRadioModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent],

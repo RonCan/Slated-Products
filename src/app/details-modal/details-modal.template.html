@@ -1,13 +1,12 @@
 <mat-dialog-content>
-  <button (click)="closeDialog()" mat-fab style="    position: absolute;
-    z-index: 1000;
-    margin-left: 10px;
-    margin-top: 10px;">
+  <button id="back" (click)="closeDialog()" mat-fab>
     <mat-icon>arrow_back</mat-icon>
   </button>
+
+  <!--CARD BEGINS-->
   <mat-card>
     <img mat-card-image src="../../assets/img/coffee.jpg">
-    <div style="text-align: center">
+    <div class="center">
       <mat-card-title>
         {{data.product.name}}
       </mat-card-title>
@@ -16,11 +15,13 @@
       </mat-card-subtitle>
     </div>
     <hr/>
+
+    <!--CARD CONTENT-->
     <mat-card-content>
       <mat-list>
         <mat-list-item>
           ${{this.total}}
-          <span style="flex: 1 1 auto;"></span>
+          <span class="space-between"></span>
           <button (click)="removeProduct()" color="accent" [disabled]="this.quantity < 2" mat-icon-button>
             <mat-icon>remove_circle</mat-icon>
           </button>
@@ -31,60 +32,47 @@
         </mat-list-item>
         <mat-divider></mat-divider>
       </mat-list>
-      <div style="color: rgba(0,0,0,.54);
-    background: rgba(0,0,0,.03); margin-left: -24px; margin-right:-24px; height:40px;line-height: 3;
-    font-weight: bold;
-    padding-left: 10px;">
+      <div class="custom-divider">
         Milk Required
       </div>
       <mat-list>
         <mat-radio-group class="example-radio-group" [(ngModel)]="selectedMilk">
           <mat-list-item *ngFor="let type of milk">
             <mat-radio-button (change)="milkChange($event, type.price)" style="width: 100%" labelPosition="before" class="example-radio-button" [value]="type.name">
-              {{type.name}} <span *ngIf="type.price" style="margin-left: 5px; color: grey">($ {{type.price}})</span>
+              {{type.name}} <span class="price-grey" *ngIf="type.price">($ {{type.price}})</span>
             </mat-radio-button>
           </mat-list-item>
         </mat-radio-group>
         <mat-divider></mat-divider>
       </mat-list>
-      <div style="color: rgba(0,0,0,.54);
-    background: rgba(0,0,0,.03); margin-left: -24px; margin-right:-24px; height:40px;line-height: 3;
-    font-weight: bold;
-    padding-left: 10px;">
+      <div class="custom-divider">
         Syrup Option
       </div>
       <mat-list>
         <mat-radio-group class="example-radio-group" [(ngModel)]="selectedSyrup">
           <mat-list-item *ngFor="let season of syrup">
             <mat-radio-button (change)="syrupChange($event, season.price)" style="width: 100%" labelPosition="before" class="example-radio-button" [value]="season.name">
-              {{season.name}} <span *ngIf="season.price" style="margin-left: 5px; color: grey">($ {{season.price}})</span>
+              {{season.name}} <span class="price-grey" *ngIf="season.price">($ {{season.price}})</span>
             </mat-radio-button>
           </mat-list-item>
         </mat-radio-group>
         <mat-divider></mat-divider>
       </mat-list>
-      <div style="color: rgba(0,0,0,.54);
-    background: rgba(0,0,0,.03); margin-left: -24px; margin-right:-24px; height:40px;line-height: 3;
-    font-weight: bold;
-    padding-left: 10px;">
+      <div class="custom-divider">
         Chocolade
       </div>
       <mat-selection-list (ngModelChange)="chocoladeChange($event)" [(ngModel)]="selectedOptions" class="chocolate" #chocolatess>
         <mat-list-option [value]="chocolate.name" *ngFor="let chocolate of chocolates">
-          {{chocolate.name}} <span *ngIf="chocolate.price" style="margin-left: 5px; color: grey">($ {{chocolate.price}})</span>
+          {{chocolate.name}} <span class="price-grey" *ngIf="chocolate.price">($ {{chocolate.price}})</span>
         </mat-list-option>
       </mat-selection-list>
-
-      <p>
-        Options selected: {{chocolatess.selectedOptions.selected.length}}
-      </p>
       <div style="margin-top: 30px">
-        <button style="width: 100%" mat-raised-button>
-          <i class="material-icons">
+        <button (click)="closeDialog()" color="accent" style="width: 100%" mat-raised-button>
+          <i class="material-icons checkout-icon">
             add_shopping_cart
           </i>
-          Basic
-          {{this.total}}
+          ADD {{quantity}} TO CART
+          <span class="cart-price">${{this.total}}</span>
         </button>
       </div>
     </mat-card-content>
