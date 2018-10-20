@@ -20,7 +20,8 @@ export class AppComponent implements OnInit {
 
   select(product): void {
     this.selectedProduct = product;
-    window.history.replaceState({}, '', `/${product.id}`); // since we are showing component as child element we don't want to route to this url because that would instantiate the same component twice
+    const url = window.location.href.indexOf('Slated-Products') > -1 ? `/Slated-Products/${product.id}` : `/${product.id}`; // Since Github Pages is hosting on a relative path
+    window.history.replaceState({}, '', url); // since we are showing component as child element we don't want to route to this url because that would instantiate the same component twice
   }
 
   onDialogClosed(event): void {

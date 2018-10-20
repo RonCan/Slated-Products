@@ -57,7 +57,8 @@ export class DetailsModalComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      window.history.replaceState({}, '', `/`);
+      const url = window.location.href.indexOf('Slated-Products') > -1 ? `/Slated-Products` : `/`; // Since Github Pages is hosting on a relative path
+      window.history.replaceState({}, '', url);
       this.dialogClosed.emit(result);
     });
   }
