@@ -2,6 +2,6 @@
   <mat-nav-list>
     <a mat-list-item (click)="select(product)" *ngFor="let product of menu.products"> {{ product.name }} </a>
   </mat-nav-list>
-  <app-details-modal *ngIf="selectedProduct" (dialogClosed)="onDialogClosed($event)" [product]="selectedProduct"></app-details-modal>
+  <app-details-modal *ngIf="selectedProduct" (dialogClosed)="onDialogClosed($event)" [product]="productService.getProduct(selectedProduct.id)"></app-details-modal>
   <router-outlet></router-outlet>
 </div>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { menu } from './menu';
+import {database} from './database';
 
 @Injectable({
   providedIn: 'root',
@@ -9,4 +10,7 @@ export class ProductService {
   getMenu = () => {
     return menu;
   };
+  getProduct = (id: number) => {
+    return database[id];
+};
 }

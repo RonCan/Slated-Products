@@ -1,11 +1,11 @@
 <mat-dialog-content>
-  <button id="back" (click)="closeDialog()" mat-fab>
+  <button id="back" (click)="closeDialog('back')" mat-fab>
     <mat-icon>arrow_back</mat-icon>
   </button>
 
   <!--CARD BEGINS-->
   <mat-card>
-    <img mat-card-image src="https://c1.staticflickr.com/4/3226/2359023467_7bb775a717.jpg">
+    <img mat-card-image [src]="data.product.images['full_size']">
     <div class="center">
       <mat-card-title>
         {{data.product.name}}
@@ -32,42 +32,48 @@
         </mat-list-item>
         <mat-divider></mat-divider>
       </mat-list>
-      <div class="custom-divider">
-        Milk Required
+
+      <!--Extras Begin-->
+      <div *ngFor="let extra of data.product.extras">
+        <div class="custom-divider">
+          {{extra.name}}
+        </div>
+
+        <!--Milk Segment-->
+        <mat-list *ngIf="extra.id === 1535">
+          <mat-radio-group class="example-radio-group" [(ngModel)]="selectedMilk">
+            <mat-list-item *ngFor="let addOn of extra.items">
+              <mat-radio-button (change)="milkChange($event, addOn.price)" style="width: 100%" labelPosition="before" class="example-radio-button" [value]="addOn.name">
+                {{addOn.name}} <span class="price-grey" *ngIf="addOn.price">($ {{addOn.price}})</span>
+              </mat-radio-button>
+            </mat-list-item>
+          </mat-radio-group>
+          <mat-divider></mat-divider>
+        </mat-list>
+
+        <!--Syrup Segment-->
+        <mat-list *ngIf="extra.id === 1536">
+          <mat-radio-group class="example-radio-group" [(ngModel)]="selectedSyrup">
+            <mat-list-item *ngFor="let addOn of extra.items">
+              <mat-radio-button (change)="syrupChange($event, addOn.price)" style="width: 100%" labelPosition="before" class="example-radio-button" [value]="addOn.name">
+                {{addOn.name}} <span class="price-grey" *ngIf="addOn.price">($ {{addOn.price}})</span>
+              </mat-radio-button>
+            </mat-list-item>
+          </mat-radio-group>
+          <mat-divider></mat-divider>
+        </mat-list>
+
+        <!--Chocolade Segment-->
+        <mat-selection-list *ngIf="extra.id === 15345" (ngModelChange)="chocoladeChange($event)" [(ngModel)]="selectedOptions" class="chocolate" #chocolatess>
+          <mat-list-option [value]="addOn.name" *ngFor="let addOn of extra.items">
+            {{addOn.name}} <span class="price-grey" *ngIf="addOn.price">($ {{addOn.price}})</span>
+          </mat-list-option>
+        </mat-selection-list>
       </div>
-      <mat-list>
-        <mat-radio-group class="example-radio-group" [(ngModel)]="selectedMilk">
-          <mat-list-item *ngFor="let type of milk">
-            <mat-radio-button (change)="milkChange($event, type.price)" style="width: 100%" labelPosition="before" class="example-radio-button" [value]="type.name">
-              {{type.name}} <span class="price-grey" *ngIf="type.price">($ {{type.price}})</span>
-            </mat-radio-button>
-          </mat-list-item>
-        </mat-radio-group>
-        <mat-divider></mat-divider>
-      </mat-list>
-      <div class="custom-divider">
-        Syrup Option
-      </div>
-      <mat-list>
-        <mat-radio-group class="example-radio-group" [(ngModel)]="selectedSyrup">
-          <mat-list-item *ngFor="let season of syrup">
-            <mat-radio-button (change)="syrupChange($event, season.price)" style="width: 100%" labelPosition="before" class="example-radio-button" [value]="season.name">
-              {{season.name}} <span class="price-grey" *ngIf="season.price">($ {{season.price}})</span>
-            </mat-radio-button>
-          </mat-list-item>
-        </mat-radio-group>
-        <mat-divider></mat-divider>
-      </mat-list>
-      <div class="custom-divider">
-        Chocolade
-      </div>
-      <mat-selection-list (ngModelChange)="chocoladeChange($event)" [(ngModel)]="selectedOptions" class="chocolate" #chocolatess>
-        <mat-list-option [value]="chocolate.name" *ngFor="let chocolate of chocolates">
-          {{chocolate.name}} <span class="price-grey" *ngIf="chocolate.price">($ {{chocolate.price}})</span>
-        </mat-list-option>
-      </mat-selection-list>
+
+      <!--Add to Cart-->
       <div style="margin-top: 30px">
-        <button (click)="closeDialog()" color="accent" style="width: 100%" mat-raised-button>
+        <button (click)="closeDialog('placeOrder')" color="accent" style="width: 100%" mat-raised-button>
           <i class="material-icons checkout-icon">
             add_shopping_cart
           </i>

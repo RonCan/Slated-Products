@@ -47,9 +47,7 @@ export class DetailsModalComponent implements OnInit {
   }
 
   productforID(): any {
-    return this.productService.getMenu().products.filter(product => {
-      return product.id === this.id;
-    })[0];
+    return this.productService.getProduct(this.id);
   }
 
   openDialog(): void {
@@ -80,21 +78,7 @@ export class DialogOverviewExampleDialog {
   selectedMilk: string;
   selectedSyrup: string;
   selectedOptions: any;
-  milk: AddOn[] = [
-    { name: 'Full Milk', price: 0 },
-    { name: 'Skim Milk', price: 0 },
-    { name: 'Soy Milk', price: 20 },
-  ];
-  syrup: AddOn[] = [
-    { name: 'Nutty', price: 10 },
-    { name: 'Cherry', price: 10 },
-    { name: 'Chocolade', price: 10 },
-  ];
-  chocolates: AddOn[] = [
-    { name: 'Toblerone', price: 70 },
-    { name: 'Patchi', price: 60 },
-    { name: 'Spartak', price: 40 },
-  ];
+  chocolates: AddOn[] = this.data.product.extras.filter(extra => extra.id === 15345)[0].items;
   total: number = this.data.product.price;
   quantity = 1;
   currentMilkPrice = 0;
@@ -149,7 +133,7 @@ export class DialogOverviewExampleDialog {
     this.chocolades = values;
   }
 
-  closeDialog(): void {
-    this.dialogRef.close({title: this.data.product.name, quantity: this.quantity, milk: this.selectedMilk, syrup: this.selectedSyrup, total: this.total});
+  closeDialog(action: string): void {
+    this.dialogRef.close({title: this.data.product.name, quantity: this.quantity, milk: this.selectedMilk, syrup: this.selectedSyrup, total: this.total, action: action});
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from './product.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,10 @@ import {MatSnackBar} from '@angular/material';
 export class AppComponent implements OnInit {
   menu: any;
   selectedProduct: any;
-  constructor(private productService: ProductService, public snackBar: MatSnackBar) {}
+  constructor(
+    public productService: ProductService,
+    public snackBar: MatSnackBar
+  ) {}
   getMenu(): void {
     this.menu = this.productService.getMenu();
   }
@@ -22,8 +25,16 @@ export class AppComponent implements OnInit {
 
   onDialogClosed(event): void {
     this.selectedProduct = null;
-    this.snackBar.open(`${event.quantity} ${event.title} for a total of $${event.total} with Milk: ${event.milk || 'Not Selected'}, Syrup: ${event.syrup || 'Not Selected'} placed`, 'OK', {
-    });
+    if(event.action !== 'back') {
+      this.snackBar.open(
+        `${event.quantity} ${event.title} for a total of $${
+          event.total
+          } with Milk: ${event.milk || 'Not Selected'}, Syrup: ${event.syrup ||
+        'Not Selected'} placed`,
+        'OK',
+        {}
+      );
+    }
   }
 
   ngOnInit() {
